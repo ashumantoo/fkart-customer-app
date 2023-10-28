@@ -1,4 +1,20 @@
-.App {
+/* * {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background: #f1f3f6;
+}
+
+.flexRow {
+  display: flex;
+}
+
+.sb {
+  justify-content: space-between;
+} */
+
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +51,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
