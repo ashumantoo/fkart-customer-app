@@ -1,21 +1,19 @@
-import './product-list.css';
+import './product-store.css';
 import React, { useEffect, useState } from 'react'
-import { Layout } from '../../components/layout/layout'
 import { message } from 'antd';
 import { AxiosError } from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { _getCategories } from '../../slices/category-slice';
-import { IAppStore } from '../../store';
-import { formatAxiosError } from '../../utils/helper';
-import { _getProductsBySlug } from '../../slices/product-list-slice';
+import { _getCategories } from '../../../slices/category-slice';
+import { IAppStore } from '../../../store';
+import { formatAxiosError } from '../../../utils/helper';
+import { _getProductsBySlug } from '../../../slices/product-slice';
 import { useParams } from 'react-router';
-import { IProduce } from 'immer/dist/internal';
-import { IProduct } from '../../types/product-types';
+import { IProduct } from '../../../types/product-types';
 
-export const ProductList = () => {
+export const ProductStore = () => {
   const params = useParams();
-  const { products, productsByPrice } = useSelector((state: IAppStore) => state.productsReducer);
+  const { productsByPrice } = useSelector((state: IAppStore) => state.productsReducer);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const [messageApi, contextHolder] = message.useMessage();
   const [priceRanges, setPriceRanges] = useState<any>({
@@ -44,11 +42,12 @@ export const ProductList = () => {
   }, [params]);
 
   return (
-    <Layout>
+    <>
+      {contextHolder}
       {
         productsByPrice && Object.keys(productsByPrice).map((key, index) => {
           return (
-            <div className='card'>
+            <div className='card' key={index}>
               <div className='card_header'>
                 <h3> {params.slug} mobiles under ₹{priceRanges[key].toLocaleString()}</h3>
                 <button>View All</button>
@@ -56,7 +55,7 @@ export const ProductList = () => {
               <div className='card_container'>
                 {productsByPrice[key].map((product: IProduct, index: number) => {
                   return (
-                    <div className='product_container'>
+                    <div className='product_container' key={index}>
                       <div className='product_img_container'>
                         <img src={product.productImages && product.productImages.length > 0 ? product.productImages[0] : ""} />
                       </div>
@@ -76,6 +75,6 @@ export const ProductList = () => {
           )
         })
       }
-    </Layout>
+    </>
   )
 }

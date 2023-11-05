@@ -4,8 +4,23 @@ import { IUser } from "./user-types";
 export interface IProductState {
   products: IProduct[];
   product: IProduct;
-  // productsByPrice: IProductByPrice;
   productsByPrice: any;
+  categoryPage: ICategoryPage;
+}
+
+export interface ICategoryPage {
+  _id: string;
+  title: string;
+  description: string;
+  category: ICategory;
+  banners: IPageContent[];
+  products: IPageContent[];
+  createdBy: IUser;
+}
+
+export interface IPageContent {
+  imgUrl: string;
+  navigateTo: string
 }
 
 export interface IProductInput {
@@ -49,7 +64,13 @@ export type ProductListApiResponse = {
   productsByPrice: IProductByPrice;
 }
 
+export type CategoryPageApiResponse = {
+  success: boolean;
+  categoryPage: ICategoryPage
+}
+
 
 export enum PRODUCT_SLICE_TYPE_ENUM {
-  GET_PRODUCT_LIST = "GET_PRODUCT_LIST"
+  GET_PRODUCT_LIST = "GET_PRODUCT_LIST",
+  GET_CATEGORY_PAGE = "GET_CATEGORY_PAGE"
 }

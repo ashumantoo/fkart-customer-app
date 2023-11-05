@@ -13,6 +13,7 @@ const initialCategoryState: ICategoryState = {
     slug: "",
     parentId: "",
     imageUrl: "",
+    type: "",
     subCategories: []
   }
 }

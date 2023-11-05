@@ -1,6 +1,6 @@
 import { configureStore, isRejected } from "@reduxjs/toolkit";
 import categoryReducer from './slices/category-slice';
-import productsReducer from './slices/product-list-slice';
+import productsReducer from './slices/product-slice';
 
 import { ICategoryState } from "./types/category-types";
 import { IProductState } from "./types/product-types";
