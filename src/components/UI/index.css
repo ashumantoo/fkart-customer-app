@@ -139,7 +139,7 @@
   transform: translateX(-50%);
 }
 
-.more {
+.more, .username {
   display: flex;
   justify-content: center;
   align-items: center;

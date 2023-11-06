@@ -19,6 +19,7 @@
 .product_container {
   width: 220px;
   padding: 16px;
+  cursor: pointer;
 }
 
 .product_container .product_img_container {

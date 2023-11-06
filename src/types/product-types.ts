@@ -64,6 +64,11 @@ export type ProductListApiResponse = {
   productsByPrice: IProductByPrice;
 }
 
+export type ProductApiResponse = {
+  success: boolean;
+  product: IProduct;
+}
+
 export type CategoryPageApiResponse = {
   success: boolean;
   categoryPage: ICategoryPage
@@ -72,5 +77,6 @@ export type CategoryPageApiResponse = {
 
 export enum PRODUCT_SLICE_TYPE_ENUM {
   GET_PRODUCT_LIST = "GET_PRODUCT_LIST",
-  GET_CATEGORY_PAGE = "GET_CATEGORY_PAGE"
+  GET_CATEGORY_PAGE = "GET_CATEGORY_PAGE",
+  GET_PRODUCT_BY_ID = "GET_PRODUCT_BY_ID"
 }

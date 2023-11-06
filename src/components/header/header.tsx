@@ -4,6 +4,11 @@ import { IoIosArrowDown, IoIosCart, IoIosSearch } from 'react-icons/io';
 import { DropdownMenu, MaterialButton, MaterialInput, Modal } from '../UI';
 import { useSelector, useDispatch } from 'react-redux';
 import { IAppStore } from '../../store';
+import { ThunkDispatch } from '@reduxjs/toolkit';
+import { _signIn, signout } from '../../slices/auth-slice';
+import { message } from 'antd';
+import { formatAxiosError } from '../../utils/helper';
+import { AxiosError } from 'axios';
 
 export const Header = () => {
   const [loginModal, setLoginModal] = useState(false);
@@ -13,8 +18,63 @@ export const Header = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  // const auth = useSelector((state: IAppStore) => state);
-  const dispatch = useDispatch();
+  const auth = useSelector((state: IAppStore) => state.authReducer);
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const userLogin = async () => {
+    try {
+      await dispatch(_signIn({
+        email,
+        password
+      })).unwrap();
+      messageApi.open({
+        type: 'success',
+        content: "Login success",
+      });
+      setLoginModal(false);
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: formatAxiosError(error as AxiosError),
+      });
+    }
+  }
+
+  const userLogout = () => {
+    dispatch(signout());
+  }
+
+  const renderLoggedInMenu = () => {
+    return (
+      <DropdownMenu
+        menu={
+          <a className='username'>
+            {auth.user ? `${auth.user.firstName} ${auth.user.lastName}` : ""}
+          </a>
+        }
+        menus={[
+          { label: "My Profile", href: "", icon: null },
+          { label: "Supercoin Zone", href: "", icon: null },
+          { label: "Flipkart Plus Zone", href: "", icon: null },
+          {
+            label: "Orders",
+            href: `/account/orders`,
+            icon: null,
+            onClick: () => {
+              // !auth.authenticate && setLoginModal(true);
+            },
+          },
+          { label: "Wishlist", href: "", icon: null },
+          { label: "Coupons", href: "", icon: null },
+          { label: "Rewards", href: "", icon: null },
+          { label: "Gift Cards", href: "", icon: null },
+          { label: "Notifications", href: "", icon: null },
+          { label: "Logout", href: "", icon: null, onClick: userLogout },
+        ]}
+      />
+    );
+  };
 
   const renderNonLoggedInMenu = () => {
     return (
@@ -33,14 +93,6 @@ export const Header = () => {
         menus={[
           { label: "My Profile", href: "", icon: null },
           { label: "Flipkart Plus Zone", href: "", icon: null },
-          {
-            label: "Orders",
-            href: `/account/orders`,
-            icon: null,
-            onClick: () => {
-              // !auth.authenticate && setLoginModal(true);
-            },
-          },
           { label: "Wishlist", href: "", icon: null },
           { label: "Rewards", href: "", icon: null },
           { label: "Gift Cards", href: "", icon: null },
@@ -65,6 +117,7 @@ export const Header = () => {
 
   return (
     <div className='header'>
+      {contextHolder}
       <Modal visible={loginModal} onClose={() => setLoginModal(false)}>
         <div className="authContainer">
           <div className="row">
@@ -74,9 +127,6 @@ export const Header = () => {
             </div>
             <div className="rightspace">
               <div className="loginInputContainer">
-                {/* {auth.error && (
-                  <div style={{ color: "red", fontSize: 12 }}>{auth.error}</div>
-                )} */}
                 {signup && (
                   <MaterialInput
                     type="text"
@@ -114,7 +164,7 @@ export const Header = () => {
                   style={{
                     margin: "40px 0 20px 0",
                   }}
-                  // onClick={userLogin}
+                  onClick={userLogin}
                 />
                 <p style={{ textAlign: "center" }}>OR</p>
                 <MaterialButton
@@ -154,10 +204,10 @@ export const Header = () => {
         </div>
         <div className='header_container_left'>
           <div className='auth_container'>
-            {renderNonLoggedInMenu()}
+            {auth.authenticated ? renderLoggedInMenu() : renderNonLoggedInMenu()}
           </div>
           <div className='seller_container'>
-            <h1>Become a seller</h1>
+            <h1>Become a Seller</h1>
           </div>
           <div className='more_container'>
             <DropdownMenu

@@ -1,16 +1,20 @@
 import { configureStore, isRejected } from "@reduxjs/toolkit";
 import categoryReducer from './slices/category-slice';
 import productsReducer from './slices/product-slice';
+import authReducer from './slices/auth-slice';
 
 import { ICategoryState } from "./types/category-types";
 import { IProductState } from "./types/product-types";
+import { IUserState } from "./types/user-types";
 
 export interface IAppStore {
+  authReducer: IUserState,
   categoryReducer: ICategoryState;
   productsReducer: IProductState;
 }
 
 const reducers = {
+  authReducer,
   categoryReducer,
   productsReducer
 }

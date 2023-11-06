@@ -10,9 +10,11 @@ import { formatAxiosError } from '../../../utils/helper';
 import { _getProductsBySlug } from '../../../slices/product-slice';
 import { useParams } from 'react-router';
 import { IProduct } from '../../../types/product-types';
+import { useNavigate, Link } from 'react-router-dom';
 
 export const ProductStore = () => {
   const params = useParams();
+  const navigage = useNavigate();
   const { productsByPrice } = useSelector((state: IAppStore) => state.productsReducer);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const [messageApi, contextHolder] = message.useMessage();
@@ -55,7 +57,7 @@ export const ProductStore = () => {
               <div className='card_container'>
                 {productsByPrice[key].map((product: IProduct, index: number) => {
                   return (
-                    <div className='product_container' key={index}>
+                    <div className='product_container' key={index} onClick={() => navigage(`/${product.slug}/${product._id}/p`)}>
                       <div className='product_img_container'>
                         <img src={product.productImages && product.productImages.length > 0 ? product.productImages[0] : ""} />
                       </div>

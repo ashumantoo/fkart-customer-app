@@ -1,3 +1,9 @@
+export interface IUserState {
+  user: IUser,
+  token: string;
+  authenticated: boolean;
+}
+
 export interface IUser {
   _id: string;
   firstName: string;
