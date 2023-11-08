@@ -52,7 +52,9 @@ export const ProductStore = () => {
             <div className='card' key={index}>
               <div className='card_header'>
                 <h3> {params.slug} mobiles under ₹{priceRanges[key].toLocaleString()}</h3>
-                <button>View All</button>
+                <button className='card_header_btn'>
+                  <span className='text-sm'>VIEW ALL</span>
+                </button>
               </div>
               <div className='card_container'>
                 {productsByPrice[key].map((product: IProduct, index: number) => {

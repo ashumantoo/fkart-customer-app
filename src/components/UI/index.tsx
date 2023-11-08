@@ -1,5 +1,5 @@
 import './index.css';
-import React, { ChangeEvent, FC, ReactNode, useState } from 'react'
+import React, { CSSProperties, ChangeEvent, FC, ReactNode, useState } from 'react'
 
 interface IDropdownMenuProps {
   menu: ReactNode;
@@ -169,5 +169,37 @@ const DropdownMenu: FC<IDropdownMenuProps> = (props) => {
   );
 }
 
-export { Modal, MaterialInput, MaterialButton, DropdownMenu }
+interface ICardProps {
+  children: ReactNode;
+  headerLeft?: ReactNode;
+  headerRight?: ReactNode;
+  styles?: CSSProperties
+}
+
+const Card: FC<ICardProps> = (props) => {
+  return (
+    <div className="card" {...props} style={{ ...props.styles }}>
+      {(props.headerLeft || props.headerRight) && (
+        <div className="cardHeader">
+          {props.headerLeft && (
+            <div
+              style={{
+                alignSelf: "center",
+                fontSize: "20px",
+                fontWeight: "500",
+              }}
+            >
+              {props.headerLeft}
+            </div>
+          )}
+          {props.headerRight && props.headerRight}
+        </div>
+      )}
+
+      {props.children}
+    </div>
+  )
+}
+
+export { Modal, MaterialInput, MaterialButton, DropdownMenu, Card }
 

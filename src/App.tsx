@@ -7,11 +7,16 @@ import { IAppStore } from './store';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { setAuthState } from './slices/auth-slice';
 import { ProductDetails } from './pages/products/product-details/product-details';
+import { Cart } from './pages/cart/cart';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />
+  },
+  {
+    path: '/cart',
+    element: <Cart />
   },
   {
     path: '/:productSlug/:productId/p',

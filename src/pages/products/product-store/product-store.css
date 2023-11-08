@@ -12,6 +12,13 @@
   border-bottom: 1px solid #cecece;
 }
 
+.card_header_btn {
+  background-color: #2874f0;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 2px;
+}
+
 .card_container {
   display: flex;
 }
