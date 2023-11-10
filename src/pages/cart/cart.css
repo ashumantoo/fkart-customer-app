@@ -4,8 +4,3 @@
   margin: 15px auto;
   justify-content: space-between;
 }
-
-.flexRow {
-  display: flex;
-  flex-direction: row;
-}

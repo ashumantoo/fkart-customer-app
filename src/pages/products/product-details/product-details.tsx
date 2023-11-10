@@ -1,6 +1,6 @@
 import './product-details.css';
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '../../../components/layout/layout';
 import React, { FC, useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,9 +14,13 @@ import { IoIosArrowForward, IoIosStar, IoMdCart } from 'react-icons/io';
 import { BiRupee } from 'react-icons/bi';
 import { AiFillThunderbolt } from 'react-icons/ai';
 import { MaterialButton } from '../../../components/UI';
+import { ICartItem, IItem } from '../../../types/cart-types';
+import { IProduct } from '../../../types/product-types';
+import { addToCart } from '../../../slices/cart-slice';
 
 export const ProductDetails: FC = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const { product } = useSelector((state: IAppStore) => state.productsReducer);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const [messageApi, contextHolder] = message.useMessage();
@@ -37,6 +41,19 @@ export const ProductDetails: FC = () => {
       fetchProductById(params.productId);
     }
   }, [params]);
+
+  const _addToCart = () => {
+    const payload = {
+      _id: product._id,
+      name: product.name,
+      image: product.productImages[0],
+      sellingPrice: typeof product.sellingPrice === 'string' ? parseInt(product.sellingPrice) : product.sellingPrice,
+      maxRetailPrice: typeof product.maxRetailPrice === 'string' ? parseInt(product.maxRetailPrice) : product.maxRetailPrice,
+      quantity: 1
+    }
+    dispatch(addToCart(payload));
+    navigate('/cart');
+  };
 
   if (Object.keys(product).length === 0) {
     return null;
@@ -69,7 +86,8 @@ export const ProductDetails: FC = () => {
                 style={{
                   marginRight: '5px'
                 }}
-                // icon={<IoMdCart />}
+                onClick={() => _addToCart()}
+              // icon={<IoMdCart />}
               />
               <MaterialButton
                 title="BUY NOW"
@@ -78,7 +96,7 @@ export const ProductDetails: FC = () => {
                 style={{
                   marginLeft: '5px'
                 }}
-                // icon={<AiFillThunderbolt />}
+              // icon={<AiFillThunderbolt />}
               />
             </div>
           </div>

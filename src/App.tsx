@@ -8,6 +8,7 @@ import { ThunkDispatch } from '@reduxjs/toolkit';
 import { setAuthState } from './slices/auth-slice';
 import { ProductDetails } from './pages/products/product-details/product-details';
 import { Cart } from './pages/cart/cart';
+import { setCartItems } from './slices/cart-slice';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ function App() {
       dispatch(setAuthState());
     }
   }, [authenticated]);
+
+  useEffect(()=>{
+    dispatch(setCartItems())
+  },[]);
 
   return (
     <RouterProvider router={router} />
