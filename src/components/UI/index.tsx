@@ -171,17 +171,17 @@ const DropdownMenu: FC<IDropdownMenuProps> = (props) => {
 
 interface ICardProps {
   children: ReactNode;
-  headerLeft?: ReactNode;
-  headerRight?: ReactNode;
+  headerleft?: ReactNode;
+  headerright?: ReactNode;
   styles?: CSSProperties
 }
 
 const Card: FC<ICardProps> = (props) => {
   return (
     <div className="card" {...props} style={{ ...props.styles }}>
-      {(props.headerLeft || props.headerRight) && (
+      {(props.headerleft || props.headerright) && (
         <div className="cardHeader">
-          {props.headerLeft && (
+          {props.headerleft && (
             <div
               style={{
                 alignSelf: "center",
@@ -189,10 +189,10 @@ const Card: FC<ICardProps> = (props) => {
                 fontWeight: "500",
               }}
             >
-              {props.headerLeft}
+              {props.headerleft}
             </div>
           )}
-          {props.headerRight && props.headerRight}
+          {props.headerright && props.headerright}
         </div>
       )}
 

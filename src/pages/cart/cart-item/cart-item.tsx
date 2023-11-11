@@ -1,12 +1,14 @@
 import './cart-item.css'
 import React, { FC } from 'react';
-import { IItem } from '../../../types/cart-types'
+import { ICartItem } from '../../../types/cart-types'
 
 interface ICartItemProps {
-  cartItem: IItem;
+  cartItem: ICartItem;
+  onQuantityIncrease: (_id: string) => void;
+  onQuantityDecrease: (_id: string) => void;
 }
 
-export const CartItem: FC<ICartItemProps> = ({ cartItem }) => {
+export const CartItem: FC<ICartItemProps> = ({ cartItem, onQuantityIncrease, onQuantityDecrease }) => {
   return (
     <div className='cartItemContainer'>
       <div className='flexRow'>
@@ -28,9 +30,14 @@ export const CartItem: FC<ICartItemProps> = ({ cartItem }) => {
         margin: '5px 0'
       }}>
         <div className='quantityControl'>
-          <button>-</button>
+          <button onClick={() => {
+            if (cartItem.quantity <= 1) return;
+            onQuantityDecrease(cartItem._id)
+          }}>
+            -
+          </button>
           <input value={cartItem.quantity} readOnly />
-          <button>+</button>
+          <button onClick={() => onQuantityIncrease(cartItem._id)}>+</button>
         </div>
         <button className='cartActionBtn'>Save for later</button>
         <button className='cartActionBtn'>Remove</button>

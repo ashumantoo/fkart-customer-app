@@ -14,8 +14,6 @@ import { IoIosArrowForward, IoIosStar, IoMdCart } from 'react-icons/io';
 import { BiRupee } from 'react-icons/bi';
 import { AiFillThunderbolt } from 'react-icons/ai';
 import { MaterialButton } from '../../../components/UI';
-import { ICartItem, IItem } from '../../../types/cart-types';
-import { IProduct } from '../../../types/product-types';
 import { addToCart } from '../../../slices/cart-slice';
 
 export const ProductDetails: FC = () => {

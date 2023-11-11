@@ -1,12 +1,8 @@
 export interface ICartState {
-  cartItems: ICartItem;
+  cartItems: ICartItem[];
 }
 
 export interface ICartItem {
-  [key: string]: IItem;
-}
-
-export interface IItem {
   _id: string;
   name: string;
   image: string;

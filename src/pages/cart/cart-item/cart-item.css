@@ -33,6 +33,10 @@
   font-size: 15px;
 }
 
+.cartActionBtn:hover {
+  color: #2874f0;
+}
+
 .quantityControl {
   display: flex;
   align-items: center;

@@ -1,4 +1,4 @@
-.card {
+.card_container {
   width: calc(100%-20px);
   margin: 16px 16px;
   border: 1px solid #cecece;
@@ -19,7 +19,7 @@
   border-radius: 2px;
 }
 
-.card_container {
+.card_content {
   display: flex;
 }
 

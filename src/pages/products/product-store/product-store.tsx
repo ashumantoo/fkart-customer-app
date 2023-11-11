@@ -49,14 +49,14 @@ export const ProductStore = () => {
       {
         productsByPrice && Object.keys(productsByPrice).map((key, index) => {
           return (
-            <div className='card' key={index}>
+            <div className='card_container' key={index}>
               <div className='card_header'>
                 <h3> {params.slug} mobiles under ₹{priceRanges[key].toLocaleString()}</h3>
                 <button className='card_header_btn'>
                   <span className='text-sm'>VIEW ALL</span>
                 </button>
               </div>
-              <div className='card_container'>
+              <div className='card_content'>
                 {productsByPrice[key].map((product: IProduct, index: number) => {
                   return (
                     <div className='product_container' key={index} onClick={() => navigage(`/${product.slug}/${product._id}/p`)}>
