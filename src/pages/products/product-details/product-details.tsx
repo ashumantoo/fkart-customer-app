@@ -14,12 +14,14 @@ import { IoIosArrowForward, IoIosStar, IoMdCart } from 'react-icons/io';
 import { BiRupee } from 'react-icons/bi';
 import { AiFillThunderbolt } from 'react-icons/ai';
 import { MaterialButton } from '../../../components/UI';
-import { addToCart } from '../../../slices/cart-slice';
+import { _addToCart, addToCart } from '../../../slices/cart-slice';
+import { ICartItem } from '../../../types/cart-types';
 
 export const ProductDetails: FC = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { product } = useSelector((state: IAppStore) => state.productsReducer);
+  const { authenticated } = useSelector((state: IAppStore) => state.authReducer);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -34,13 +36,18 @@ export const ProductDetails: FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (params && params.productId) {
-      fetchProductById(params.productId);
+  const saveCartItems = async (data: ICartItem) => {
+    try {
+      await dispatch(_addToCart([data])).unwrap();
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: formatAxiosError(error as AxiosError),
+      });
     }
-  }, [params]);
+  }
 
-  const _addToCart = () => {
+  const _addToCartHandler = async () => {
     const payload = {
       _id: product._id,
       name: product.name,
@@ -49,9 +56,19 @@ export const ProductDetails: FC = () => {
       maxRetailPrice: typeof product.maxRetailPrice === 'string' ? parseInt(product.maxRetailPrice) : product.maxRetailPrice,
       quantity: 1
     }
-    dispatch(addToCart(payload));
+    if (authenticated) {
+      saveCartItems(payload);
+    } else {
+      dispatch(addToCart(payload));
+    }
     navigate('/cart');
   };
+
+  useEffect(() => {
+    if (params && params.productId) {
+      fetchProductById(params.productId);
+    }
+  }, [params]);
 
   if (Object.keys(product).length === 0) {
     return null;
@@ -84,7 +101,7 @@ export const ProductDetails: FC = () => {
                 style={{
                   marginRight: '5px'
                 }}
-                onClick={() => _addToCart()}
+                onClick={() => _addToCartHandler()}
               // icon={<IoMdCart />}
               />
               <MaterialButton

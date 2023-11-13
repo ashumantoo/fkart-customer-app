@@ -10,3 +10,21 @@ export interface ICartItem {
   maxRetailPrice: number;
   quantity: number;
 }
+
+export interface ICartItemInput {
+  cartItems: IItemInput[];
+}
+
+export interface IItemInput {
+  product: string;
+  quantity: number;
+}
+
+export type GetCartItemsApiResponse = {
+  cartItems: ICartItem[];
+}
+
+export enum CART_SLICE_TYPE_ENUM {
+  ADD_TO_CART = "ADD_TO_CART",
+  GET_CART_ITEMS = "GET_CART_ITEMS",
+}

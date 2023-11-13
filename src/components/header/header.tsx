@@ -9,6 +9,7 @@ import { _signIn, signout } from '../../slices/auth-slice';
 import { message } from 'antd';
 import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
+import { resetCartItems } from '../../slices/cart-slice';
 
 export const Header = () => {
   const [loginModal, setLoginModal] = useState(false);
@@ -42,6 +43,7 @@ export const Header = () => {
   }
 
   const userLogout = () => {
+    dispatch(resetCartItems());
     dispatch(signout());
   }
 
