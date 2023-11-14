@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authApi from "../api/auth-api";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { IUser, IUserState, Roles } from "../types/user-types";
+import { AuthActionEnum, IAuthState, Roles } from "../types/user-types";
 
-const initialAuthState: IUserState = {
+const initialAuthState: IAuthState = {
   user: {
     _id: "",
     firstName: "",
@@ -24,11 +24,6 @@ const initialAuthState: IUserState = {
   authenticated: false,
 };
 
-enum AuthActionEnum {
-  SIGNIN = "SIGNIN",
-  SIGNUP = "SIGNUP"
-}
-
 export interface AxiosError<T = any> extends Error {
   config: AxiosRequestConfig;
   code?: string;
@@ -38,7 +33,7 @@ export interface AxiosError<T = any> extends Error {
   toJSON: () => object;
 }
 
-interface IAdminUserInput {
+interface IUserInput {
   firstName: string;
   lastName: string;
   email: string;
@@ -48,7 +43,7 @@ interface IAdminUserInput {
 
 export const _signUp = createAsyncThunk(
   AuthActionEnum.SIGNUP,
-  async (adminUser: IAdminUserInput, { rejectWithValue }) => {
+  async (adminUser: IUserInput, { rejectWithValue }) => {
     try {
       const response = await authApi.signUp(adminUser);
       return response.data;

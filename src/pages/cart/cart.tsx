@@ -1,6 +1,6 @@
 import './cart.css';
 import { Layout } from '../../components/layout/layout'
-import { Card } from '../../components/UI'
+import { Card, MaterialButton } from '../../components/UI'
 import { useDispatch, useSelector } from 'react-redux';
 import { IAppStore } from '../../store';
 import { CartItem } from './cart-item/cart-item';
@@ -10,8 +10,10 @@ import { useEffect } from 'react';
 import { message } from 'antd';
 import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const Cart = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const [messageApi, contextHolder] = message.useMessage();
   const { cartItems } = useSelector((state: IAppStore) => state.cartReducer);
@@ -50,6 +52,7 @@ export const Cart = () => {
             <Card
               headerleft={"My Cart"}
               headerright={<div>Delivery To</div>}
+              styles={{ width: 'calc(100%-400)', overflow: "hidden" }}
             >
               {cartItems.length > 0 && cartItems.map((item, index) => (
                 <CartItem
@@ -59,11 +62,28 @@ export const Cart = () => {
                   onQuantityDecrease={handleQuantityDecrease}
                 />
               ))}
-
+              <div style={{
+                width: '100%',
+                display: 'flex',
+                backgroundColor: "#fff",
+                justifyContent: "flex-end",
+                boxShadow: `0 0 10px 10px #eee`,
+                padding: '10px 0',
+                boxSizing: 'border-box'
+              }}>
+                <div style={{ width: '250px' }}>
+                  <MaterialButton
+                    title='PLACE ORDER'
+                    onClick={() => navigate('/checkout')}
+                    bgColor='#fb641b'
+                    textColor='white'
+                  />
+                </div>
+              </div>
             </Card>
             <Card
               headerleft={'Price'}
-              styles={{ width: '500px' }}
+              styles={{ width: '380px' }}
             >
 
             </Card>

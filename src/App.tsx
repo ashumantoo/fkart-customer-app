@@ -13,6 +13,7 @@ import { ICartItem } from './types/cart-types';
 import { message } from 'antd';
 import { formatAxiosError } from './utils/helper';
 import { AxiosError } from 'axios';
+import { Checkout } from './pages/checkout/checkout';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: '/cart',
     element: <Cart />
+  },
+  {
+    path: '/checkout',
+    element: <Checkout />
   },
   {
     path: '/:productSlug/:productId/p',

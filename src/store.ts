@@ -3,21 +3,24 @@ import categoryReducer from './slices/category-slice';
 import productsReducer from './slices/product-slice';
 import authReducer from './slices/auth-slice';
 import cartReducer from './slices/cart-slice';
+import userReducer from './slices/user-slice';
 
 import { ICategoryState } from "./types/category-types";
 import { IProductState } from "./types/product-types";
-import { IUserState } from "./types/user-types";
+import { IAuthState, IUserState } from "./types/user-types";
 import { ICartState } from "./types/cart-types";
 
 export interface IAppStore {
-  authReducer: IUserState,
+  authReducer: IAuthState;
+  userReducer: IUserState;
   categoryReducer: ICategoryState;
   productsReducer: IProductState;
-  cartReducer: ICartState
+  cartReducer: ICartState;
 }
 
 const reducers = {
   authReducer,
+  userReducer,
   categoryReducer,
   productsReducer,
   cartReducer

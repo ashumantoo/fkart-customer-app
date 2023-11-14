@@ -5,7 +5,7 @@ import { DropdownMenu, MaterialButton, MaterialInput, Modal } from '../UI';
 import { useSelector, useDispatch } from 'react-redux';
 import { IAppStore } from '../../store';
 import { ThunkDispatch } from '@reduxjs/toolkit';
-import { _signIn, signout } from '../../slices/auth-slice';
+import { _signIn, _signUp, signout } from '../../slices/auth-slice';
 import { message } from 'antd';
 import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
@@ -17,6 +17,7 @@ export const Header = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const auth = useSelector((state: IAppStore) => state.authReducer);
@@ -32,6 +33,28 @@ export const Header = () => {
       messageApi.open({
         type: 'success',
         content: "Login success",
+      });
+      setLoginModal(false);
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: formatAxiosError(error as AxiosError),
+      });
+    }
+  }
+
+  const userSignup = async () => {
+    try {
+      await dispatch(_signUp({
+        firstName,
+        lastName,
+        email,
+        mobile,
+        password
+      })).unwrap();
+      messageApi.open({
+        type: 'success',
+        content: "Signup success. Please login now",
       });
       setLoginModal(false);
     } catch (error) {
@@ -148,10 +171,18 @@ export const Header = () => {
 
                 <MaterialInput
                   type="text"
-                  label="Email/Mobile Number"
+                  label="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+                {signup && (
+                  <MaterialInput
+                    type="text"
+                    label="Mobile(Optional)"
+                    value={mobile}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                )}
                 <MaterialInput
                   type="password"
                   label="Password"
@@ -166,7 +197,7 @@ export const Header = () => {
                   style={{
                     margin: "40px 0 20px 0",
                   }}
-                  onClick={userLogin}
+                  onClick={signup ? userSignup : userLogin}
                 />
                 <p style={{ textAlign: "center" }}>OR</p>
                 <MaterialButton

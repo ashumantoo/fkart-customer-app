@@ -15,9 +15,9 @@ interface IMenus {
 }
 
 interface IMaterialButtonProps {
-  style: object;
-  bgColor: string;
-  textColor: string;
+  style?: CSSProperties;
+  bgColor?: string;
+  textColor?: string;
   icon?: any;
   title: string;
   fontSize?: string;
@@ -26,7 +26,7 @@ interface IMaterialButtonProps {
 
 interface IMaterialInputProps {
   label: string;
-  type: string;
+  type?: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   rightElement?: ReactNode
@@ -78,7 +78,7 @@ const MaterialInput: FC<IMaterialInputProps> = (props) => {
       >
         <input
           className="input"
-          type={props.type}
+          type={props.type ? props.type : 'text'}
           value={props.value}
           onChange={props.onChange}
           onFocus={(e) => {
@@ -122,9 +122,9 @@ const MaterialButton: FC<IMaterialButtonProps> = (props) => {
       <button
         className="materialButton"
         style={{
-          backgroundColor: props.bgColor,
-          color: props.textColor,
-          fontSize: props.fontSize,
+          backgroundColor: props.bgColor ? props.bgColor : '#2874f0',
+          color: props.textColor ? props.textColor : 'white',
+          fontSize: props.fontSize ? props.fontSize : '16px',
         }}
         onClick={onClick}
       >
