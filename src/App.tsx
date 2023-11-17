@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Home } from './pages/home/home';
 import { createBrowserRouter, Route, RouterProvider } from 'react-router-dom';
 import Products from './pages/products';
@@ -8,7 +8,7 @@ import { ThunkDispatch } from '@reduxjs/toolkit';
 import { setAuthState } from './slices/auth-slice';
 import { ProductDetails } from './pages/products/product-details/product-details';
 import { Cart } from './pages/cart/cart';
-import { _addToCart, setCartItems } from './slices/cart-slice';
+import { _addToCart, _getCartItems, setCartItems } from './slices/cart-slice';
 import { ICartItem } from './types/cart-types';
 import { message } from 'antd';
 import { formatAxiosError } from './utils/helper';
@@ -54,6 +54,17 @@ function App() {
     }
   }
 
+  const fetchCartItems = useCallback(async () => {
+    try {
+      await dispatch(_getCartItems()).unwrap();
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: formatAxiosError(error as AxiosError),
+      });
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     if (!authenticated) {
       dispatch(setAuthState());
@@ -62,6 +73,8 @@ function App() {
       const cartItems = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart') || "") : null;
       if (cartItems && cartItems.length) {
         saveCartItems(cartItems);
+      } else {
+        fetchCartItems();
       }
     }
   }, [authenticated]);

@@ -2,16 +2,18 @@ import React, { FC, useEffect, useState } from "react";
 import { MaterialButton, MaterialInput } from "../../components/UI";
 import { useDispatch, useSelector } from "react-redux";
 import { IAppStore } from "../../store";
-import { IUser, IUserAddress, UserAddressType } from "../../types/user-types";
+import { IFormattedAddress, IUser, IUserAddress, UserAddressType } from "../../types/user-types";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { message } from "antd";
-import { _addUserAddress } from "../../slices/user-slice";
+import { _addUserAddress, _updateUserAddress } from "../../slices/user-slice";
 import { formatAxiosError } from "../../utils/helper";
 import { AxiosError } from "axios";
 
 interface IAddressFormProps {
-  initialData: IUserAddress;
-  onSubmitForm: (address: IUserAddress) => void;
+  initialData: IFormattedAddress;
+  withoutLayout?: boolean;
+  onSubmitForm: (address: IFormattedAddress) => void;
+  onCancel: () => void;
 }
 
 const AddressForm: FC<IAddressFormProps> = (props) => {
@@ -55,7 +57,31 @@ const AddressForm: FC<IAddressFormProps> = (props) => {
 
   const addUserAddress = async (address: IUserAddress) => {
     try {
-      await dispatch(_addUserAddress(address)).unwrap();
+      const response = await dispatch(_addUserAddress(address)).unwrap();
+      if (response) {
+        messageApi.open({
+          type: 'success',
+          content: "New Address added",
+        });
+      }
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: formatAxiosError(error as AxiosError),
+      });
+    }
+  }
+
+  const updateUserAddress = async (addressId: string, address: IUserAddress) => {
+    try {
+      const response = await dispatch(_updateUserAddress({ addressId, address })).unwrap();
+      if (response) {
+        messageApi.open({
+          type: 'success',
+          content: "Address updated",
+        });
+        setId(response.address._id);
+      }
     } catch (error) {
       messageApi.open({
         type: 'error',
@@ -79,35 +105,50 @@ const AddressForm: FC<IAddressFormProps> = (props) => {
         addressType,
       },
     };
-    console.log("111111========", payload);
-    addUserAddress(payload.address);
+    if (id) {
+      updateUserAddress(id, payload.address);
+    } else {
+      addUserAddress(payload.address);
+    }
+    setSubmitFlag(true);
   };
 
   useEffect(() => {
-    console.log("addressCount", user.shippingAddresses);
+    // console.log("addressCount", user.shippingAddresses);
     if (submitFlag) {
-      console.log("where are we", user);
-      let _address: IUserAddress = {
-        name,
-        pincode,
-        mobileNumber,
-        locality,
-        buildingAndStreet,
-        cityTown,
-        landmark,
-        state,
-        alternateMobile: alternateMobile,
-        addressType: UserAddressType.HOME
-      };
+      // console.log("where are we", user);
+      const _address = user.shippingAddresses.find((adr) => adr._id === id);
+      if (_address) {
+        const updatedAddress = {
+          ..._address,
+          selected: false,
+          editable: false
+        }
+        console.log("1111111------------", updatedAddress);
+        props.onSubmitForm(updatedAddress);
+      }
+      // let _address: IFormattedAddress = {
+      //   name,
+      //   pincode,
+      //   mobileNumber,
+      //   locality,
+      //   buildingAndStreet,
+      //   cityTown,
+      //   landmark,
+      //   state,
+      //   alternateMobile: alternateMobile,
+      //   addressType: UserAddressType.HOME,
+      //   editable: false,
+      //   selected: false
+      // };
       // if (id) {
 
       // } else {
       //   _address = user.shippingAddresses.slice(user.shippingAddresses.length - 1)[0];
       // }
 
-      props.onSubmitForm(_address);
     }
-  }, [user.shippingAddresses]);
+  }, [user.shippingAddresses, submitFlag]);
 
   const renderAddressForm = () => {
     return (
@@ -225,9 +266,9 @@ const AddressForm: FC<IAddressFormProps> = (props) => {
     );
   };
 
-  // if (props.withoutLayout) {
-  //   return <div>{renderAddressForm()}</div>;
-  // }
+  if (props.withoutLayout) {
+    return <div>{renderAddressForm()}</div>;
+  }
 
   return (
     <div className="checkoutStep" style={{ background: "#f5faff" }}>

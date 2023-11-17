@@ -201,5 +201,13 @@ const Card: FC<ICardProps> = (props) => {
   )
 }
 
-export { Modal, MaterialInput, MaterialButton, DropdownMenu, Card }
+const Anchor: FC<any> = (props) => {
+  return (
+    <button {...props} className="anchorButton">
+      {props.name}
+    </button>
+  );
+};
+
+export { Modal, MaterialInput, MaterialButton, DropdownMenu, Card, Anchor }
 

@@ -11,6 +11,7 @@ import { message } from 'antd';
 import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { PriceDetails } from '../../components/price-details/price-details';
 
 export const Cart = () => {
   const navigate = useNavigate();
@@ -81,12 +82,14 @@ export const Cart = () => {
                 </div>
               </div>
             </Card>
-            <Card
-              headerleft={'Price'}
-              styles={{ width: '380px' }}
-            >
-
-            </Card>
+            <PriceDetails
+              totalItems={cartItems.reduce((qty, currentItem) => {
+                return qty + currentItem.quantity;
+              }, 0)}
+              totalPrice={cartItems.reduce((price, currentItem) => {
+                return price + currentItem.sellingPrice;
+              }, 0)}
+            />
           </>
         ) : (
           <div>
