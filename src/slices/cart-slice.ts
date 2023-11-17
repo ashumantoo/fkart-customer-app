@@ -11,12 +11,10 @@ export const _addToCart = createAsyncThunk(
   CART_SLICE_TYPE_ENUM.ADD_TO_CART,
   async (items: ICartItem[], { rejectWithValue }) => {
     try {
-      console.log("333333333------", items);
       const _cartData: IItemInput[] = items.map((item) => ({
         product: item._id,
         quantity: item.quantity
       }));
-      console.log("44444444--------", _cartData);
       const response = await cartApi.addToCart({ cartItems: _cartData });
       if (response) {
         const _response = await cartApi.getCartItems();

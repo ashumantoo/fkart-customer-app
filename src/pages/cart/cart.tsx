@@ -6,14 +6,18 @@ import { IAppStore } from '../../store';
 import { CartItem } from './cart-item/cart-item';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { _getCartItems, decreaseCartItemQty, increaseCartItemQty } from '../../slices/cart-slice';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { message } from 'antd';
 import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { PriceDetails } from '../../components/price-details/price-details';
 
-export const Cart = () => {
+interface ICartProps {
+  onlyCartItem: boolean
+}
+
+export const Cart: FC<ICartProps> = ({ onlyCartItem }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const [messageApi, contextHolder] = message.useMessage();
@@ -44,6 +48,25 @@ export const Cart = () => {
       fetchCartItems();
     }
   }, [authenticated]);
+
+  if (onlyCartItem) {
+    return (
+      <>
+        {cartItems.length > 0 ? cartItems.map((item, index) => (
+          <CartItem
+            key={index}
+            cartItem={item}
+            onQuantityIncrease={handleQuantityIncrease}
+            onQuantityDecrease={handleQuantityDecrease}
+          />
+        )) : (
+          <div>
+            Cart is empty
+          </div>
+        )}
+      </>
+    )
+  }
 
   return (
     <Layout>

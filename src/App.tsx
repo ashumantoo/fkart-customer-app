@@ -22,7 +22,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/cart',
-    element: <Cart />
+    element: <Cart onlyCartItem={false} />
   },
   {
     path: '/checkout',
