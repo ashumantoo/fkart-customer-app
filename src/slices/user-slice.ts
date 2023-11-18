@@ -4,6 +4,7 @@ import { IUserAddress, USER_ADDRESS_ACTION_ENUM, UserAddressType, IUserState, IO
 import userApi from "../api/user-api";
 
 export const initialUserState: IUserState = {
+  orders: [],
   shippingAddresses: [],
   shippingAddress: {
     _id: "",
@@ -17,7 +18,7 @@ export const initialUserState: IUserState = {
     landmark: "",
     alternateMobile: "",
     addressType: UserAddressType.HOME
-  }
+  },
 };
 
 export interface AxiosError<T = any> extends Error {
@@ -85,6 +86,20 @@ export const _updateUserAddress = createAsyncThunk(
   }
 )
 
+export const _deleteUserAddress = createAsyncThunk(
+  USER_ADDRESS_ACTION_ENUM.DELETE_USER_ADDRESS,
+  async (addressId: string, { rejectWithValue }) => {
+    try {
+      const response = await userApi.deleteUserAddress(addressId);
+      return response.data;
+    } catch (error) {
+      localStorage.clear();
+      const err = error as AxiosError;
+      throw rejectWithValue(err);
+    }
+  }
+)
+
 export const _createOrder = createAsyncThunk(
   USER_ADDRESS_ACTION_ENUM.CREATE_ORDER,
   async (order: IOrderInput, { rejectWithValue }) => {
@@ -99,12 +114,11 @@ export const _createOrder = createAsyncThunk(
   }
 )
 
-
-export const _deleteUserAddress = createAsyncThunk(
-  USER_ADDRESS_ACTION_ENUM.DELETE_USER_ADDRESS,
-  async (addressId: string, { rejectWithValue }) => {
+export const _getOrders = createAsyncThunk(
+  USER_ADDRESS_ACTION_ENUM.GET_ORDERS,
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await userApi.deleteUserAddress(addressId);
+      const response = await userApi.getOrders();
       return response.data;
     } catch (error) {
       localStorage.clear();
@@ -132,6 +146,11 @@ const userSlice = createSlice({
     builder.addCase(_getUserAddress.fulfilled, (state, action) => {
       if (action.payload && action.payload.address) {
         state.shippingAddress = action.payload.address
+      }
+    });
+    builder.addCase(_getOrders.fulfilled, (state, action) => {
+      if (action.payload && action.payload.orders) {
+        state.orders = action.payload.orders
       }
     });
   }

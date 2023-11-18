@@ -9,6 +9,7 @@ export interface IAuthState {
 export interface IUserState {
   shippingAddresses: IUserAddress[];
   shippingAddress: IUserAddress;
+  orders: IOrder[];
 }
 
 export interface IUser {
@@ -59,6 +60,7 @@ export interface IOrder {
   address: IUserAddress
   totalAmount: number;
   items: IOrderItem[];
+  paymentStatus: string;
 }
 
 export interface IOrderItem {
@@ -111,6 +113,11 @@ export type CreateOrderApiResponse = {
   order: IOrder;
 }
 
+export type GetOrdersApiResponse = {
+  success: boolean;
+  orders: IOrder[];
+}
+
 export enum statusEnum {
   PENDING = "PENDING",
   CONFIRMED = 'CONFIRMED',
@@ -132,5 +139,6 @@ export enum USER_ADDRESS_ACTION_ENUM {
   GET_USER_ADDRESS = "GET_USER_ADDRESS",
   UPDATE_USER_ADDRESS = "UPDATE_USER_ADDRESS",
   DELETE_USER_ADDRESS = "DELETE_USER_ADDRESS",
-  CREATE_ORDER = "CREATE_ORDER"
+  CREATE_ORDER = "CREATE_ORDER",
+  GET_ORDERS = "GET_ORDERS"
 }

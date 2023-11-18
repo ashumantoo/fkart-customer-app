@@ -1,6 +1,7 @@
 import {
   CreateOrderApiResponse,
   CreateUserAddressApiResponse,
+  GetOrdersApiResponse,
   GetUserAddressApiResponse,
   GetUserAddressesApiResponse,
   IOrderInput,
@@ -16,4 +17,5 @@ export default {
   deleteUserAddress: (addressId: string) => axios.delete<GetUserAddressesApiResponse>(`/consumer/address/${addressId}`),
 
   createOrder: (data: IOrderInput) => axios.post<CreateOrderApiResponse>('/consumer/order', data),
+  getOrders: () => axios.get<GetOrdersApiResponse>('/consumer/order'),
 }

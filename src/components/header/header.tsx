@@ -10,8 +10,10 @@ import { message } from 'antd';
 import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
 import { resetCartItems } from '../../slices/cart-slice';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
+  const navigate = useNavigate();
   const [loginModal, setLoginModal] = useState(false);
   const [signup, setSignup] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -88,6 +90,7 @@ export const Header = () => {
             icon: null,
             onClick: () => {
               // !auth.authenticate && setLoginModal(true);
+              navigate('/account/orders')
             },
           },
           { label: "Wishlist", href: "", icon: null },

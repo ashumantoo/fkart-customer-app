@@ -14,6 +14,7 @@ import { message } from 'antd';
 import { formatAxiosError } from './utils/helper';
 import { AxiosError } from 'axios';
 import { Checkout } from './pages/checkout/checkout';
+import { Orders } from './pages/orders/orders';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: '/checkout',
     element: <Checkout />
+  },
+  {
+    path: '/account/orders',
+    element: <Orders />
   },
   {
     path: '/:productSlug/:productId/p',
@@ -74,6 +79,7 @@ function App() {
       if (cartItems && cartItems.length) {
         saveCartItems(cartItems);
       } else {
+        //TODO: remove this from here it should be implemented on checkout page if some reloading the page
         fetchCartItems();
       }
     }

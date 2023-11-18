@@ -110,7 +110,7 @@ export const Cart: FC<ICartProps> = ({ onlyCartItem }) => {
                 return qty + currentItem.quantity;
               }, 0)}
               totalPrice={cartItems.reduce((price, currentItem) => {
-                return price + currentItem.sellingPrice;
+                return price + (currentItem.sellingPrice * currentItem.quantity);
               }, 0)}
             />
           </>
