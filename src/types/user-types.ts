@@ -1,3 +1,5 @@
+import { IProduct } from "./product-types";
+
 export interface IAuthState {
   user: IUser,
   token: string;
@@ -38,8 +40,31 @@ export interface IAddress {
 //   addresses: IUserAddress[]
 // }
 
-export interface IUserAddressInput {
-  address: IUserAddress;
+export interface IOrderInput {
+  address: string;
+  totalAmount: number;
+  items: IOrderItemInput[];
+  paymentStatus: string;
+}
+
+export interface IOrderItemInput {
+  product: string;
+  payableAmount: number;
+  purchaseQuantity: number;
+}
+
+export interface IOrder {
+  _id: string;
+  user: IUser;
+  address: IUserAddress
+  totalAmount: number;
+  items: IOrderItem[];
+}
+
+export interface IOrderItem {
+  product: IProduct;
+  payableAmount: number;
+  purchaseQuantity: number;
 }
 
 export interface IUserAddress {
@@ -81,6 +106,21 @@ export type GetUserAddressApiResponse = {
   address: IUserAddress
 }
 
+export type CreateOrderApiResponse = {
+  success: boolean;
+  order: IOrder;
+}
+
+export enum statusEnum {
+  PENDING = "PENDING",
+  CONFIRMED = 'CONFIRMED',
+  CANCELLED = 'CANCELLED',
+  DISPATCHED = 'DISPATCHED',
+  DELIVERED = 'DELIVERED',
+  REFUNDED = 'REFUNDED',
+  COMPLETED = 'COMPLETED'
+}
+
 export enum AuthActionEnum {
   SIGNIN = "SIGNIN",
   SIGNUP = "SIGNUP"
@@ -91,5 +131,6 @@ export enum USER_ADDRESS_ACTION_ENUM {
   GET_USER_ADDRESSES = "GET_USER_ADDRESSES",
   GET_USER_ADDRESS = "GET_USER_ADDRESS",
   UPDATE_USER_ADDRESS = "UPDATE_USER_ADDRESS",
-  DELETE_USER_ADDRESS = "DELETE_USER_ADDRESS"
+  DELETE_USER_ADDRESS = "DELETE_USER_ADDRESS",
+  CREATE_ORDER = "CREATE_ORDER"
 }

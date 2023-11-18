@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { IUserAddress, USER_ADDRESS_ACTION_ENUM, UserAddressType, IUserState } from "../types/user-types";
+import { IUserAddress, USER_ADDRESS_ACTION_ENUM, UserAddressType, IUserState, IOrderInput } from "../types/user-types";
 import userApi from "../api/user-api";
 
 export const initialUserState: IUserState = {
@@ -76,6 +76,20 @@ export const _updateUserAddress = createAsyncThunk(
   async ({ addressId, address }: { addressId: string, address: IUserAddress }, { rejectWithValue }) => {
     try {
       const response = await userApi.updateUserAddress(addressId, address);
+      return response.data;
+    } catch (error) {
+      localStorage.clear();
+      const err = error as AxiosError;
+      throw rejectWithValue(err);
+    }
+  }
+)
+
+export const _createOrder = createAsyncThunk(
+  USER_ADDRESS_ACTION_ENUM.CREATE_ORDER,
+  async (order: IOrderInput, { rejectWithValue }) => {
+    try {
+      const response = await userApi.createOrder(order);
       return response.data;
     } catch (error) {
       localStorage.clear();

@@ -1,7 +1,9 @@
 import {
+  CreateOrderApiResponse,
   CreateUserAddressApiResponse,
   GetUserAddressApiResponse,
   GetUserAddressesApiResponse,
+  IOrderInput,
   IUserAddress
 } from '../types/user-types';
 import axios from '../utils/axios';
@@ -12,4 +14,6 @@ export default {
   getUserAddress: (addressId: string) => axios.get<GetUserAddressApiResponse>(`/consumer/address/${addressId}`),
   updateUserAddress: (addressId: string, data: IUserAddress) => axios.put<GetUserAddressApiResponse>(`/consumer/address/${addressId}`, { address: data }),
   deleteUserAddress: (addressId: string) => axios.delete<GetUserAddressesApiResponse>(`/consumer/address/${addressId}`),
+
+  createOrder: (data: IOrderInput) => axios.post<CreateOrderApiResponse>('/consumer/order', data),
 }

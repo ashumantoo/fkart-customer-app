@@ -3,14 +3,14 @@ import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react';
 import { Layout } from '../../components/layout/layout';
 import { useDispatch, useSelector } from 'react-redux';
 import { IAppStore } from '../../store';
-import { ThunkDispatch } from '@reduxjs/toolkit';
-import { _getUserAddresses, initialUserState } from '../../slices/user-slice';
-import { Divider, message } from 'antd';
+import { ThunkDispatch, current } from '@reduxjs/toolkit';
+import { _createOrder, _getUserAddresses, initialUserState } from '../../slices/user-slice';
+import { message } from 'antd';
 import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
 import { Anchor, Card, MaterialButton, MaterialInput } from '../../components/UI';
 import AddressForm from './address-form';
-import { IFormattedAddress, IUserAddress } from '../../types/user-types';
+import { IFormattedAddress, IOrderInput, statusEnum } from '../../types/user-types';
 import { PriceDetails } from '../../components/price-details/price-details';
 import { _getCartItems } from '../../slices/cart-slice';
 import { Cart } from '../cart/cart';
@@ -155,6 +155,23 @@ export const Checkout: FC = () => {
     }
   }, [dispatch]);
 
+  const createOrder = useCallback(async (order: IOrderInput) => {
+    try {
+      const response = await dispatch(_createOrder(order)).unwrap();
+      if (response.success) {
+        messageApi.open({
+          type: 'success',
+          content: "Order created successfully",
+        });
+      }
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: formatAxiosError(error as AxiosError),
+      });
+    }
+  }, [dispatch]);
+
   const handleAddressSelection = (address: IFormattedAddress) => {
     const updatedAddresses = formattedAddresses.map((faddress) => faddress._id === address._id ?
       ({ ...faddress, selected: true, editable: false }) : ({ ...faddress, selected: false, editable: false }));
@@ -187,7 +204,22 @@ export const Checkout: FC = () => {
   }
 
   const onOrderConfirm = () => {
+    const totalAmount = cartItems.reduce((price, currentItem) => {
+      return price + (currentItem.sellingPrice * currentItem.quantity);
+    }, 0);
+    const orderItems = cartItems.map((item) => ({
+      product: item._id,
+      payableAmount: item.sellingPrice,
+      purchaseQuantity: item.quantity
+    }));
+    const orderInput: IOrderInput = {
+      address: selectedAddress && selectedAddress._id ? selectedAddress?._id : "",
+      totalAmount,
+      items: orderItems,
+      paymentStatus: statusEnum.PENDING
+    }
     setConfirmOrder(true);
+    createOrder(orderInput);
   }
 
   useEffect(() => {
@@ -213,6 +245,7 @@ export const Checkout: FC = () => {
 
   return (
     <Layout>
+      {contextHolder}
       <div className='cartContainer' style={{ alignItems: 'flex-start' }}>
         <div className='checkoutContainer'>
           {/* check if user logged in or not */}
@@ -368,7 +401,7 @@ export const Checkout: FC = () => {
             return qty + currentItem.quantity;
           }, 0)}
           totalPrice={cartItems.reduce((price, currentItem) => {
-            return price + currentItem.sellingPrice;
+            return price + (currentItem.sellingPrice * currentItem.quantity);
           }, 0)}
         />
       </div>
