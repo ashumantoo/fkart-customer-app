@@ -13,4 +13,16 @@ axiosInstance.interceptors.request.use((req) => {
   return req;
 })
 
+// Add a response interceptor
+axiosInstance.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  console.log(error);
+  if (error.response.data.message === 'jwt expired') {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+  return Promise.reject(error);
+});
+
 export default axiosInstance;
