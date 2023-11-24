@@ -4,6 +4,7 @@ import { ProductStore } from './product-store/product-store';
 import { useLocation, useParams } from 'react-router-dom';
 import { getQueryParams } from '../../utils/helper';
 import { ProductPage } from './product-page/product-page';
+import { ProductList } from './product-list/product-list';
 
 export enum CATEGORY_TYPE {
   PAGE = 'PAGE',
@@ -27,7 +28,7 @@ const Products: FC = () => {
           content = <ProductPage />
           break;
         default:
-          content = null
+          content = <ProductList />
       }
     }
     return content;

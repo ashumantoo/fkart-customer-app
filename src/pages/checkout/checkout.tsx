@@ -10,7 +10,7 @@ import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
 import { Anchor, Card, MaterialButton, MaterialInput } from '../../components/UI';
 import AddressForm from './address-form';
-import { IFormattedAddress, IOrderInput, statusEnum } from '../../types/user-types';
+import { IFormattedAddress, IOrderInput, PaymentStatusEnum } from '../../types/user-types';
 import { PriceDetails } from '../../components/price-details/price-details';
 import { _getCartItems } from '../../slices/cart-slice';
 import { Cart } from '../cart/cart';
@@ -216,7 +216,7 @@ export const Checkout: FC = () => {
       address: selectedAddress && selectedAddress._id ? selectedAddress?._id : "",
       totalAmount,
       items: orderItems,
-      paymentStatus: statusEnum.PENDING
+      paymentStatus: PaymentStatusEnum.PENDING
     }
     setConfirmOrder(true);
     createOrder(orderInput);

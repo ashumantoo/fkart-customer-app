@@ -61,6 +61,14 @@ export interface IOrder {
   totalAmount: number;
   items: IOrderItem[];
   paymentStatus: string;
+  paymentType: string;
+  orderStatus: IOrderStatus[];
+}
+
+export interface IOrderStatus {
+  status: string;
+  date: string;
+  isCompleted: boolean;
 }
 
 export interface IOrderItem {
@@ -118,14 +126,18 @@ export type GetOrdersApiResponse = {
   orders: IOrder[];
 }
 
-export enum statusEnum {
-  PENDING = "PENDING",
-  CONFIRMED = 'CONFIRMED',
+export enum OrderStatusEnum {
+  ORDERED = 'ORDERED',
+  PACKED = 'PACKED',
+  SHIPPED = 'SHIPPED',
+  DELIVERED = 'DELIVERED'
+}
+
+export enum PaymentStatusEnum {
+  PENDING = 'PENDING',
+  PAID = 'PAID',
   CANCELLED = 'CANCELLED',
-  DISPATCHED = 'DISPATCHED',
-  DELIVERED = 'DELIVERED',
-  REFUNDED = 'REFUNDED',
-  COMPLETED = 'COMPLETED'
+  REFUND = 'REFUND'
 }
 
 export enum AuthActionEnum {

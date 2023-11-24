@@ -87,11 +87,7 @@ export const Header = () => {
           {
             label: "Orders",
             href: `/account/orders`,
-            icon: null,
-            onClick: () => {
-              // !auth.authenticate && setLoginModal(true);
-              navigate('/account/orders')
-            },
+            icon: null
           },
           { label: "Wishlist", href: "", icon: null },
           { label: "Coupons", href: "", icon: null },
@@ -120,6 +116,14 @@ export const Header = () => {
         }
         menus={[
           { label: "My Profile", href: "", icon: null },
+          {
+            label: "Orders",
+            href: `/account/orders`,
+            icon: null,
+            onClick: () => {
+              !auth.authenticated && setLoginModal(true)
+            }
+          },
           { label: "Flipkart Plus Zone", href: "", icon: null },
           { label: "Wishlist", href: "", icon: null },
           { label: "Rewards", href: "", icon: null },
@@ -218,7 +222,10 @@ export const Header = () => {
       </Modal>
       <div className='header_container'>
         <div className='header_container_right'>
-          <div className='logo'>
+          <div
+            className='logo'
+            onClick={() => navigate('/')}
+          >
             <img
               src={require('../../assets/images/fk-plus_3.png')}
               alt='flipkart logo'

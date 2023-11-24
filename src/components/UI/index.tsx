@@ -1,5 +1,6 @@
 import './index.css';
-import React, { CSSProperties, ChangeEvent, FC, ReactNode, useState } from 'react'
+import React, { CSSProperties, ChangeEvent, FC, ReactNode, useState } from 'react';
+import { IoIosArrowForward } from 'react-icons/io';
 
 interface IDropdownMenuProps {
   menu: ReactNode;
@@ -209,5 +210,31 @@ const Anchor: FC<any> = (props) => {
   );
 };
 
-export { Modal, MaterialInput, MaterialButton, DropdownMenu, Card, Anchor }
+interface IBreedProps {
+  breeds: IBreed[];
+}
+
+interface IBreed {
+  href: string;
+  name: string;
+}
+
+const Breed: FC<IBreedProps> = ({ breeds }) => {
+  return (
+    <div className='breed'>
+      <ul>
+        {breeds && breeds.map((breed, index) => {
+          return (
+            <li key={index}>
+              <a href={breed.href}>{breed.name}</a>
+              {<IoIosArrowForward />}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
+export { Modal, MaterialInput, MaterialButton, DropdownMenu, Card, Anchor, Breed }
 
