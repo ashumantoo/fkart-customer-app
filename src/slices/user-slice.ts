@@ -5,6 +5,31 @@ import userApi from "../api/user-api";
 
 export const initialUserState: IUserState = {
   orders: [],
+  order: {
+    _id: "",
+    items: [],
+    orderStatus: [],
+    paymentStatus: "",
+    paymentType: "",
+    totalAmount: 0,
+    user: {
+      _id: "",
+      firstName: "",
+      lastName: "",
+    },
+    address: {
+      _id: "",
+      name: "",
+      mobileNumber: "",
+      buildingAndStreet: "",
+      cityTown: "",
+      landmark: "",
+      locality: "",
+      pincode: "",
+      state: "",
+      addressType: UserAddressType.HOME
+    }
+  },
   shippingAddresses: [],
   shippingAddress: {
     _id: "",
@@ -128,6 +153,20 @@ export const _getOrders = createAsyncThunk(
   }
 )
 
+export const _getOrder = createAsyncThunk(
+  USER_ADDRESS_ACTION_ENUM.GET_ORDER,
+  async (orderId: string, { rejectWithValue }) => {
+    try {
+      const response = await userApi.getOrder(orderId);
+      return response.data;
+    } catch (error) {
+      localStorage.clear();
+      const err = error as AxiosError;
+      throw rejectWithValue(err);
+    }
+  }
+)
+
 const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
@@ -151,6 +190,11 @@ const userSlice = createSlice({
     builder.addCase(_getOrders.fulfilled, (state, action) => {
       if (action.payload && action.payload.orders) {
         state.orders = action.payload.orders
+      }
+    });
+    builder.addCase(_getOrder.fulfilled, (state, action) => {
+      if (action.payload && action.payload.order) {
+        state.order = action.payload.order
       }
     });
   }

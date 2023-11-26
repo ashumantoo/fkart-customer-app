@@ -1,6 +1,7 @@
 import './index.css';
 import React, { CSSProperties, ChangeEvent, FC, ReactNode, useState } from 'react';
-import { IoIosArrowForward } from 'react-icons/io';
+import { BiRupee } from 'react-icons/bi';
+import { IoIosArrowForward, IoIosStar } from 'react-icons/io';
 
 interface IDropdownMenuProps {
   menu: ReactNode;
@@ -236,5 +237,62 @@ const Breed: FC<IBreedProps> = ({ breeds }) => {
   )
 }
 
-export { Modal, MaterialInput, MaterialButton, DropdownMenu, Card, Anchor, Breed }
+interface IRatingProps {
+  value: number
+}
+
+const Rating: FC<IRatingProps> = (props) => {
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        background: "#388e3c",
+        color: "#fff",
+        fontWeight: "400",
+        fontSize: "12px",
+        borderRadius: "3px",
+        padding: "2px 5px",
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+        {props.value} <span style={{ marginBottom: 2, marginLeft: 4 }}><IoIosStar /></span>
+      </div>
+    </span>
+  );
+};
+
+interface IPriceProps {
+  value: number;
+  fontSize?: number;
+}
+
+const Price: FC<IPriceProps> = (props) => {
+  return (
+    <div
+      style={{
+        fontSize: props.fontSize ? props.fontSize : "14px",
+        fontWeight: "bold",
+        margin: "5px 0",
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: "center", alignItems: "center", marginRight: 16 }}>
+        <BiRupee />
+        {props.value}
+      </div>
+    </div>
+  );
+};
+
+
+export {
+  Modal,
+  MaterialInput,
+  MaterialButton,
+  DropdownMenu,
+  Card,
+  Anchor,
+  Breed,
+  Rating,
+  Price
+}
 

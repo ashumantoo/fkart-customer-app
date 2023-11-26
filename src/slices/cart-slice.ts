@@ -41,6 +41,19 @@ export const _getCartItems = createAsyncThunk(
   }
 )
 
+export const _removeCartItem = createAsyncThunk(
+  CART_SLICE_TYPE_ENUM.REMOVE_CART_ITEM,
+  async (productId: string, { rejectWithValue }) => {
+    try {
+      const response = await cartApi.removeCartItem(productId);
+      return { data: response.data, productId };
+    } catch (error) {
+      const err = error as AxiosError;
+      rejectWithValue(err)
+    }
+  }
+)
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState: cartInitialState,
@@ -89,6 +102,11 @@ const cartSlice = createSlice({
     builder.addCase(_addToCart.fulfilled, (state, action) => {
       if (action.payload && action.payload.cartItems) {
         state.cartItems = action.payload?.cartItems;
+      }
+    })
+    builder.addCase(_removeCartItem.fulfilled, (state, action) => {
+      if (action.payload && action.payload.productId) {
+        state.cartItems = state.cartItems.filter((item) => item._id !== action.payload?.productId)
       }
     })
   }

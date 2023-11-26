@@ -9,6 +9,7 @@ import { _getOrders } from '../../slices/user-slice';
 import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
 import { Breed } from '../../components/UI';
+import { Link } from 'react-router-dom';
 
 export const Orders: FC = () => {
   const { orders } = useSelector((state: IAppStore) => state.userReducer);
@@ -43,8 +44,8 @@ export const Orders: FC = () => {
         {orders && orders.length > 0 ? (
           orders.map((order, index) => {
             return order.items.map((item, index) => (
-              <Card style={{ maxWidth: '1200px', margin: '5px auto' }}>
-                <div className='orderItemContainer'>
+              <Card style={{ maxWidth: '1200px', margin: '5px auto' }} key={index}>
+                <Link to={`/account/orders/${order._id}`} className='orderItemContainer'>
                   <div style={{
                     width: 80,
                     height: 80,
@@ -75,7 +76,7 @@ export const Orders: FC = () => {
                     <div>{item.payableAmount}</div>
                     <div>{order.paymentStatus}</div>
                   </div>
-                </div>
+                </Link>
               </Card>
             ))
           })

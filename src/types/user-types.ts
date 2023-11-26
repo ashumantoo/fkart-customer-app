@@ -10,6 +10,7 @@ export interface IUserState {
   shippingAddresses: IUserAddress[];
   shippingAddress: IUserAddress;
   orders: IOrder[];
+  order: IOrder;
 }
 
 export interface IUser {
@@ -56,7 +57,7 @@ export interface IOrderItemInput {
 
 export interface IOrder {
   _id: string;
-  user: IUser;
+  user: Partial<IUser>;
   address: IUserAddress
   totalAmount: number;
   items: IOrderItem[];
@@ -126,6 +127,11 @@ export type GetOrdersApiResponse = {
   orders: IOrder[];
 }
 
+export type GetOrderApiResponse = {
+  success: boolean;
+  order: IOrder;
+}
+
 export enum OrderStatusEnum {
   ORDERED = 'ORDERED',
   PACKED = 'PACKED',
@@ -152,5 +158,6 @@ export enum USER_ADDRESS_ACTION_ENUM {
   UPDATE_USER_ADDRESS = "UPDATE_USER_ADDRESS",
   DELETE_USER_ADDRESS = "DELETE_USER_ADDRESS",
   CREATE_ORDER = "CREATE_ORDER",
-  GET_ORDERS = "GET_ORDERS"
+  GET_ORDERS = "GET_ORDERS",
+  GET_ORDER = "GET_ORDER"
 }

@@ -1,6 +1,7 @@
 import {
   CreateOrderApiResponse,
   CreateUserAddressApiResponse,
+  GetOrderApiResponse,
   GetOrdersApiResponse,
   GetUserAddressApiResponse,
   GetUserAddressesApiResponse,
@@ -18,4 +19,5 @@ export default {
 
   createOrder: (data: IOrderInput) => axios.post<CreateOrderApiResponse>('/consumer/order', data),
   getOrders: () => axios.get<GetOrdersApiResponse>('/consumer/order'),
+  getOrder: (orderId: string) => axios.get<GetOrderApiResponse>(`/consumer/order/${orderId}`),
 }

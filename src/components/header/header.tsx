@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IAppStore } from '../../store';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { _signIn, _signUp, signout } from '../../slices/auth-slice';
-import { message } from 'antd';
+import { Badge, message } from 'antd';
 import { formatAxiosError } from '../../utils/helper';
 import { AxiosError } from 'axios';
 import { resetCartItems } from '../../slices/cart-slice';
@@ -23,6 +23,7 @@ export const Header = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const auth = useSelector((state: IAppStore) => state.authReducer);
+  const { cartItems } = useSelector((state: IAppStore) => state.cartReducer);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -187,7 +188,7 @@ export const Header = () => {
                     type="text"
                     label="Mobile(Optional)"
                     value={mobile}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setMobile(e.target.value)}
                   />
                 )}
                 <MaterialInput
@@ -271,8 +272,12 @@ export const Header = () => {
           </div>
           <div className='cart_container'>
             <a href={`/cart`} className="cart">
-              <IoIosCart />
-              <span style={{ margin: "0 10px" }}>Cart</span>
+              <Badge count={cartItems.length || 0}>
+                <div style={{ display: 'flex', fontSize: 16 }}>
+                  <IoIosCart style={{ color: 'white' }} />
+                  <span style={{ margin: "0 10px", color: "white" }}>Cart</span>
+                </div>
+              </Badge>
             </a>
           </div>
         </div>

@@ -11,6 +11,7 @@ import { _getProductsBySlug } from '../../../slices/product-slice';
 import { useParams } from 'react-router';
 import { IProduct } from '../../../types/product-types';
 import { useNavigate, Link } from 'react-router-dom';
+import { Price, Rating } from '../../../components/UI';
 
 export const ProductStore = () => {
   const params = useParams();
@@ -66,10 +67,12 @@ export const ProductStore = () => {
                       <div className='product_info'>
                         <div style={{ margin: "5px 0" }}>{product.name}</div>
                         <div>
-                          <span>4.3</span>  &nbsp;
-                          <span>45,999</span>
+                          <Rating value={4.3} /> &nbsp;
+                          <span>(45,999)</span>
                         </div>
-                        <div className='product_price'>₹{product.sellingPrice.toLocaleString()}</div>
+                        <div className='product_price'>
+                          <Price value={typeof product.sellingPrice === 'string' ? parseInt(product.sellingPrice) : product.sellingPrice} />
+                        </div>
                       </div>
                     </div>
                   )

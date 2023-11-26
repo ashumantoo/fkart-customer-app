@@ -15,6 +15,7 @@ import { formatAxiosError } from './utils/helper';
 import { AxiosError } from 'axios';
 import { Checkout } from './pages/checkout/checkout';
 import { Orders } from './pages/orders/orders';
+import { OrderDetails } from './pages/orders/order-details';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: '/account/orders',
     element: <Orders />
+  },
+  {
+    path: '/account/orders/:orderId',
+    element: <OrderDetails />
   },
   {
     path: '/:productSlug/:productId/p',

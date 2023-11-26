@@ -1,6 +1,12 @@
 import './cart-item.css'
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { ICartItem } from '../../../types/cart-types'
+import { useDispatch } from 'react-redux';
+import { ThunkDispatch } from '@reduxjs/toolkit';
+import { message } from 'antd';
+import { _removeCartItem } from '../../../slices/cart-slice';
+import { formatAxiosError } from '../../../utils/helper';
+import { AxiosError } from 'axios';
 
 interface ICartItemProps {
   cartItem: ICartItem;
@@ -9,8 +15,29 @@ interface ICartItemProps {
 }
 
 export const CartItem: FC<ICartItemProps> = ({ cartItem, onQuantityIncrease, onQuantityDecrease }) => {
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const removeCartItem = useCallback(async (productId: string) => {
+    try {
+      const response = await dispatch(_removeCartItem(productId)).unwrap();
+      if (response) {
+        messageApi.open({
+          type: 'success',
+          content: "Item removed successfully",
+        });
+      }
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: formatAxiosError(error as AxiosError),
+      });
+    }
+  }, [dispatch]);
+
   return (
     <div className='cartItemContainer'>
+      {contextHolder}
       <div className='flexRow'>
         <div className='cartProImgContainer'>
           <img src={cartItem.image} alt="" />
@@ -40,7 +67,7 @@ export const CartItem: FC<ICartItemProps> = ({ cartItem, onQuantityIncrease, onQ
           <button onClick={() => onQuantityIncrease(cartItem._id)}>+</button>
         </div>
         <button className='cartActionBtn'>Save for later</button>
-        <button className='cartActionBtn'>Remove</button>
+        <button className='cartActionBtn' onClick={() => removeCartItem(cartItem._id)}>Remove</button>
       </div>
     </div>
   )
